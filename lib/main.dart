@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safe_places_app/constants/colors.dart';
 import 'package:safe_places_app/screens/home_screen.dart';
+import 'package:safe_places_app/screens/image_screen.dart';
 import 'package:safe_places_app/screens/login_screen.dart';
 import 'package:safe_places_app/screens/place_screen.dart';
 
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
       routes: {
         HomeScreen.route: (context) => const HomeScreen(),
         LoginScreen.route: (context) => const LoginScreen(),
-        PlaceScreen.route: (context) => const PlaceScreen()
+        PlaceScreen.route: (context) => const PlaceScreen(),
+        ImageScreen.route: (context) => const ImageScreen()
       },
     );
   }

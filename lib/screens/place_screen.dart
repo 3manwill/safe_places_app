@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:safe_places_app/models/results/place_details_result.dart';
+import 'package:safe_places_app/providers/place_provider.dart';
 import 'package:safe_places_app/widgets/place/place_details_info.dart';
+import 'package:provider/provider.dart';
 
 class PlaceScreen extends StatelessWidget {
   static const String route = '/place';
@@ -17,9 +19,9 @@ class PlaceScreen extends StatelessWidget {
         title: Text(place.title),
         backgroundColor: Theme.of(context).primaryColor,
       ),
-      body: PlaceDetailsInfo(
-        place: place,
-      ),
+      body: MultiProvider(providers: [
+        ChangeNotifierProvider.value(value: PlaceProvider(place)),
+      ], child: const PlaceDetailsInfo()),
     );
   }
 }

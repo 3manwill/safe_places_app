@@ -5,13 +5,18 @@ class CommentResult {
   final String content;
   final String date;
   final String userName;
+  final String? userPhoto;
+
+  factory CommentResult.fromJson(String json) =>
+      CommentResult.fromMap(jsonDecode(json));
 
 //<editor-fold desc="Data Methods">
-  CommentResult({
+  const CommentResult({
     required this.id,
     required this.content,
     required this.date,
     required this.userName,
+    this.userPhoto,
   });
 
   @override
@@ -22,15 +27,20 @@ class CommentResult {
           id == other.id &&
           content == other.content &&
           date == other.date &&
-          userName == other.userName);
+          userName == other.userName &&
+          userPhoto == other.userPhoto);
 
   @override
   int get hashCode =>
-      id.hashCode ^ content.hashCode ^ date.hashCode ^ userName.hashCode;
+      id.hashCode ^
+      content.hashCode ^
+      date.hashCode ^
+      userName.hashCode ^
+      userPhoto.hashCode;
 
   @override
   String toString() {
-    return 'CommentResult{ id: $id, content: $content, date: $date, userName: $userName,}';
+    return 'CommentResult{ id: $id, content: $content, date: $date, userName: $userName, userPhoto: $userPhoto,}';
   }
 
   CommentResult copyWith({
@@ -38,12 +48,14 @@ class CommentResult {
     String? content,
     String? date,
     String? userName,
+    String? userPhoto,
   }) {
     return CommentResult(
       id: id ?? this.id,
       content: content ?? this.content,
       date: date ?? this.date,
       userName: userName ?? this.userName,
+      userPhoto: userPhoto ?? this.userPhoto,
     );
   }
 
@@ -53,6 +65,7 @@ class CommentResult {
       'content': content,
       'date': date,
       'userName': userName,
+      'userPhoto': userPhoto,
     };
   }
 
@@ -62,11 +75,9 @@ class CommentResult {
       content: map['content'] as String,
       date: map['date'] as String,
       userName: map['userName'] as String,
+      userPhoto: map['userPhoto'] as String?,
     );
   }
-
-  factory CommentResult.fromJson(String json) =>
-      CommentResult.fromMap(jsonDecode(json));
 
 //</editor-fold>
 }

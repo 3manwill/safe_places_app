@@ -6,6 +6,8 @@ import 'package:safe_places_app/models/results/feature_result.dart';
 import 'package:safe_places_app/models/results/place_image_result.dart';
 import 'package:safe_places_app/models/results/rating_result.dart';
 
+enum UserExistsStatus { notExists, pending, accepted, rejected }
+
 class PlaceDetailsResult {
   final String id;
   final String title;
@@ -17,12 +19,15 @@ class PlaceDetailsResult {
   final int size;
   final String creatorId;
   final String creatorName;
-  final bool isUserExists;
+  UserExistsStatus existsStatus;
   final int availableSize;
   final RatingResult userRating;
   final List<PlaceImageResult> images;
   final List<CommentResult> comments;
   final List<FeatureResult> features;
+
+  factory PlaceDetailsResult.fromJson(String json) =>
+      PlaceDetailsResult.fromMap(jsonDecode(json));
 
 //<editor-fold desc="Data Methods">
   PlaceDetailsResult({
@@ -36,7 +41,7 @@ class PlaceDetailsResult {
     required this.size,
     required this.creatorId,
     required this.creatorName,
-    required this.isUserExists,
+    required this.existsStatus,
     required this.availableSize,
     required this.userRating,
     required this.images,
@@ -59,7 +64,7 @@ class PlaceDetailsResult {
           size == other.size &&
           creatorId == other.creatorId &&
           creatorName == other.creatorName &&
-          isUserExists == other.isUserExists &&
+          existsStatus == other.existsStatus &&
           availableSize == other.availableSize &&
           userRating == other.userRating &&
           images == other.images &&
@@ -78,7 +83,7 @@ class PlaceDetailsResult {
       size.hashCode ^
       creatorId.hashCode ^
       creatorName.hashCode ^
-      isUserExists.hashCode ^
+      existsStatus.hashCode ^
       availableSize.hashCode ^
       userRating.hashCode ^
       images.hashCode ^
@@ -87,7 +92,7 @@ class PlaceDetailsResult {
 
   @override
   String toString() {
-    return 'PlaceDetailsResult{ id: $id, title: $title, description: $description, latitude: $latitude, longitude: $longitude, rating: $rating, expired: $expired, size: $size, creatorId: $creatorId, creatorName: $creatorName, isUserExists: $isUserExists, availableSize: $availableSize, userRating: $userRating, images: $images, comments: $comments, features: $features,}';
+    return 'PlaceDetailsResult{ id: $id, title: $title, description: $description, latitude: $latitude, longitude: $longitude, rating: $rating, expired: $expired, size: $size, creatorId: $creatorId, creatorName: $creatorName, existsStatus: $existsStatus, availableSize: $availableSize, userRating: $userRating, images: $images, comments: $comments, features: $features,}';
   }
 
   PlaceDetailsResult copyWith({
@@ -101,7 +106,7 @@ class PlaceDetailsResult {
     int? size,
     String? creatorId,
     String? creatorName,
-    bool? isUserExists,
+    UserExistsStatus? existsStatus,
     int? availableSize,
     RatingResult? userRating,
     List<PlaceImageResult>? images,
@@ -119,7 +124,7 @@ class PlaceDetailsResult {
       size: size ?? this.size,
       creatorId: creatorId ?? this.creatorId,
       creatorName: creatorName ?? this.creatorName,
-      isUserExists: isUserExists ?? this.isUserExists,
+      existsStatus: existsStatus ?? this.existsStatus,
       availableSize: availableSize ?? this.availableSize,
       userRating: userRating ?? this.userRating,
       images: images ?? this.images,
@@ -140,7 +145,7 @@ class PlaceDetailsResult {
       'size': size,
       'creatorId': creatorId,
       'creatorName': creatorName,
-      'isUserExists': isUserExists,
+      'existsStatus': existsStatus,
       'availableSize': availableSize,
       'userRating': userRating,
       'images': images,
@@ -161,20 +166,14 @@ class PlaceDetailsResult {
       size: map['size'] as int,
       creatorId: map['creatorId'] as String,
       creatorName: map['creatorName'] as String,
-      isUserExists: map['isUserExists'] as bool,
+      existsStatus:UserExistsStatus.values[map['existsStatus'] as int],
       availableSize: map['availableSize'] as int,
       userRating: RatingResult.fromMap(map['userRating']),
-      // images: map['images'] as List<PlaceImageResult>,
-      images: (map['images'] as List).map((img) => PlaceImageResult.fromMap(img)).toList(),
-      // comments: map['comments'] as List<CommentResult>,
-      comments: (map['comments'] as List).map((map) => CommentResult.fromMap(map)).toList(),
-      // features: map['features'] as List<FeatureResult>,
-      features: (map['features'] as List).map((map) => FeatureResult.fromMap(map)).toList()
+      images: (map['images'] as List).map((imgMap) => PlaceImageResult.fromMap(imgMap)).toList(),
+      comments: (map['comments'] as List).map((commentMap) => CommentResult.fromMap(commentMap)).toList(),
+      features: (map['features'] as List).map((fMap) => FeatureResult.fromMap(fMap)).toList(),
     );
   }
-
-  factory PlaceDetailsResult.fromJson(String json) =>
-      PlaceDetailsResult.fromMap(jsonDecode(json));
 
 //</editor-fold>
 }

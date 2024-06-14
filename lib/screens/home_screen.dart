@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/painting.dart';
@@ -11,6 +10,7 @@ import 'package:safe_places_app/models/results/place_result.dart';
 import 'package:safe_places_app/screens/login_screen.dart';
 import 'package:safe_places_app/services/identity_services.dart';
 import 'package:safe_places_app/services/places_services.dart';
+import 'package:safe_places_app/widgets/home/home_drawer.dart';
 import 'package:safe_places_app/widgets/home/place_info.dart';
 import 'package:safe_places_app/widgets/public/future_widget.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -79,9 +79,14 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
+
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      endDrawer:const HomeDrawer(),
       body: FutureWidget<Map<String, dynamic>>(
         future: _getHomePageData(context),
         loadingWidget: const Center(
@@ -105,23 +110,49 @@ class _HomeScreenState extends State<HomeScreen> {
                     'https://api.mapbox.com/styles/v1/basel-askar/clvz63hic02df01qp6xhqf4tl/tiles/256/{z}/{x}/{y}@2x?access_token=${data['mapKey']}',
                 userAgentPackageName: 'com.example.safe_places_app',
               ),
-              Container(
-                padding: const EdgeInsets.all(10),
-                height: double.infinity,
-                width: double.infinity,
-                child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          controller.move(LatLng(data['lat'], data['lng']), 15);
-                        },
-                        icon: const Icon(Icons.my_location),
-                        style: IconButton.styleFrom(
-                            backgroundColor: AppColor.primary),
-                      )
-                    ]),
+              SafeArea(
+                child: Container(
+                  padding: const EdgeInsets.only(right: 10, bottom: 10),
+                  height: double.infinity,
+                  width: double.infinity,
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                            style: IconButton.styleFrom(
+                                backgroundColor: AppColor.primary),
+                            onPressed: () {
+                              _scaffoldKey.currentState?.openEndDrawer();
+                            },
+                            icon: const Icon(Icons.menu)),
+                        SizedBox(
+                          child: Column(
+                            children: [
+                              IconButton(
+                                style: IconButton.styleFrom(
+                                    backgroundColor: AppColor.primary),
+                                onPressed: () {
+                                  Navigator.of(context)
+                                      .pushReplacementNamed(HomeScreen.route);
+                                },
+                                icon: const Icon(Icons.refresh),
+                              ),
+                              const SizedBox(height: 10),
+                              IconButton(
+                                onPressed: () {
+                                  controller.move(
+                                      LatLng(data['lat'], data['lng']), 15);
+                                },
+                                icon: const Icon(Icons.my_location),
+                                style: IconButton.styleFrom(
+                                    backgroundColor: AppColor.primary),
+                              )
+                            ],
+                          ),
+                        ),
+                      ]),
+                ),
               ),
               MarkerLayer(
                   markers: (data['places'] as List<PlaceResult>).map((p) {

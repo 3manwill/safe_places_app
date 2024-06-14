@@ -9,7 +9,11 @@ class PlaceComment extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Image.asset('assets/user.png', width: 30),
+      leading: comment.userPhoto == null
+          ? Image.asset('assets/user.png', width: 40)
+          : ClipRRect(
+              borderRadius: BorderRadius.circular(50),
+              child: Image.network(comment.userPhoto!, width: 40)),
       title: Text(comment.userName),
       subtitle: Text(comment.content),
     );

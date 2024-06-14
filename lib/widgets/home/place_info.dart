@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:safe_places_app/models/results/place_result.dart';
 import 'package:safe_places_app/screens/place_screen.dart';
 import 'package:safe_places_app/services/places_services.dart';
+import 'package:safe_places_app/widgets/home/place_details_button.dart';
 import 'package:safe_places_app/widgets/home/place_field.dart';
 import 'package:safe_places_app/widgets/home/rating_place.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,16 +34,7 @@ class PlaceInfo extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              TextButton(
-                onPressed: () {
-                  placesServices.getPlaceDetails(place.id).then((details) {
-                    Navigator.of(context)
-                        .pushNamed(PlaceScreen.route, arguments: details);
-                  });
-                },
-                style: TextButton.styleFrom(foregroundColor: Colors.blueAccent),
-                child: const Text('More info'),
-              ),
+              PlaceDetailsButton(placeId: place.id),
               TextButton(
                 onPressed: () {
                   final url = 'https://www.google.com/maps/place/${place.latitude},${place.longitude}';

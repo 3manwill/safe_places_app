@@ -14,6 +14,14 @@ class _TokenServices {
 
     return await storage.read(key: 'jwt');
   }
+
+
+  Future<void> removeToken() async {
+    const storage = FlutterSecureStorage();
+
+    await storage.delete(key: 'jwt');
+  }
+
 }
 
 

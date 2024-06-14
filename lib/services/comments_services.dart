@@ -20,7 +20,7 @@ class _CommentsServices {
     // Get place comments
     final response = await http.get(
       Uri.parse(
-          '${Urls.safePlaces}/api/comments/place-comments?placeId=$placeId'),
+          '${Urls.baseUrl}/api/comments/place-comments?placeId=$placeId'),
       headers: {'Authorization': 'Bearer $jwt'},
     );
 
@@ -44,7 +44,7 @@ class _CommentsServices {
       throw {'unauthorized':true};
     }
     
-    final response = await http.post(Uri.parse('${Urls.safePlaces}/api/comments/add-comment'),headers: {
+    final response = await http.post(Uri.parse('${Urls.baseUrl}/api/comments/add-comment'),headers: {
       'Authorization': 'Bearer $jwt',
       'Content-Type': 'application/json'
     },

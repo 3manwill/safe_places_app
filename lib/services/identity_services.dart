@@ -15,7 +15,7 @@ class _IdentityServices {
   Future<IdentityResult> loginAction(LoginParams login) async {
 
       http.Response response = await http.post(
-          Uri.parse('${Urls.identity}/api/account/login'),
+          Uri.parse('${Urls.baseUrl}/api/account/login'),
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(login.toMap()));
 
@@ -46,7 +46,7 @@ class _IdentityServices {
     }
     
     
-    http.Response response = await http.get(Uri.parse('${Urls.identity}/auth/authorize'),headers: {
+    http.Response response = await http.get(Uri.parse('${Urls.baseUrl}/auth/authorize'),headers: {
       'Authorization': 'Bearer $jwt'
     });
 

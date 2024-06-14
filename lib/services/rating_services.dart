@@ -15,7 +15,7 @@ class _RatingServices {
     }
 
     http.Response response = await http.post(
-        Uri.parse('${Urls.safePlaces}/api/ratings/rate-place?placeId=$placeId&value=$value'),
+        Uri.parse('${Urls.baseUrl}/api/ratings/rate-place?placeId=$placeId&value=$value'),
         headers: {'Authorization': 'Bearer $jwt'});
 
     return RatingResult.fromJson(response.body);
