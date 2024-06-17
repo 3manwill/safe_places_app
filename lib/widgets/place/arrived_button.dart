@@ -13,9 +13,18 @@ import 'package:safe_places_app/services/token_services.dart';
 import 'package:safe_places_app/widgets/place/cancel_arrived_button.dart';
 
 final _statusString = {
-  UserExistsStatus.pending: 'Waiting confirm booking place',
-  UserExistsStatus.accepted: 'Accepted Booking place',
-  UserExistsStatus.rejected: 'Rejected Booking place',
+  UserExistsStatus.pending: {
+    'text': 'Pending',
+    'color': Colors.blueAccent,
+  },
+  UserExistsStatus.accepted: {
+    'text': 'Accepted Booking place',
+    'color': Colors.green,
+  },
+  UserExistsStatus.rejected: {
+    'text': 'Rejected Booking place',
+    'color': Colors.red,
+  },
 };
 
 class ArrivedButton extends StatefulWidget {
@@ -50,6 +59,14 @@ class _ArrivedButtonState extends State<ArrivedButton> {
           tokenServices.removeToken();
           Navigator.of(context).pushReplacementNamed(LoginScreen.route);
 
+        }
+      }
+      else if (map.containsKey('message')){
+        final snakbar = SnackBar(content: Text(map['message'] as String), action: SnackBarAction(label: 'Close', onPressed: (){
+          ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        },),);
+        if (context.mounted){
+          ScaffoldMessenger.of(context).showSnackBar(snakbar);
         }
       }
     }
@@ -91,7 +108,8 @@ class _ArrivedButtonState extends State<ArrivedButton> {
           Expanded(
             child: Center(
               child: Text(
-                _statusString[place.existsStatus]!,
+                _statusString[place.existsStatus]!['text'] as String,
+                style: TextStyle(color: _statusString[place.existsStatus]!['color'] as Color),
               ),
             ),
           )
@@ -100,10 +118,11 @@ class _ArrivedButtonState extends State<ArrivedButton> {
     }
 
     return ElevatedButton(
+      style: ElevatedButton.styleFrom(backgroundColor: Theme.of(context).primaryColor, foregroundColor: Colors.white),
       onPressed: () {
         arrivedRequest(place.id,context);
       },
-      child: const Text('Arrived'),
+      child: const Text('Check-in'),
     );
   }
 }
